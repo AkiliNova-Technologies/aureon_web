@@ -35,24 +35,28 @@ const navigation = [
 ];
 
 export default function Header() {
-  const { cartCount, wishlist, setIsCartOpen, setIsSearchOpen, isSearchOpen } = useStore();
+  const { cartCount, wishlist, setIsCartOpen, setIsSearchOpen, isSearchOpen } =
+    useStore();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   return (
     <>
-      {/* Announcement bar */}
-      <div className="bg-charcoal text-ivory text-center py-2.5 text-xs tracking-[0.15em] uppercase font-light">
+      {/* Announcement bar - hidden on mobile */}
+      <div className="hidden sm:block bg-charcoal text-ivory text-center py-2.5 text-xs tracking-[0.15em] uppercase font-light">
         Complimentary shipping on orders above $150 &nbsp;·&nbsp;{" "}
-        <Link href="/shop" className="underline decoration-gold underline-offset-2 hover:text-gold transition-colors">
+        <Link
+          href="/shop"
+          className="underline decoration-gold underline-offset-2 hover:text-gold transition-colors"
+        >
           Shop Now
         </Link>
       </div>
 
       {/* Main header */}
       <header className="sticky top-0 z-50 bg-ivory/95 backdrop-blur-md border-b border-warm-gray/30">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-          <div className="flex items-center justify-between h-[72px]">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12">
+          <div className="flex items-center justify-between h-[60px] sm:h-[72px] py-4 lg:py-6">
             {/* Mobile menu toggle */}
             <button
               className="lg:hidden p-2 -ml-2"
@@ -68,18 +72,22 @@ export default function Header() {
                 <div
                   key={item.name}
                   className="relative"
-                  onMouseEnter={() => item.children && setActiveDropdown(item.name)}
+                  onMouseEnter={() =>
+                    item.children && setActiveDropdown(item.name)
+                  }
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
                   <Link
                     href={item.href}
                     className={cn(
                       "text-[13px] tracking-[0.08em] uppercase text-charcoal hover:text-gold transition-colors duration-300 flex items-center gap-1",
-                      item.children && "cursor-pointer"
+                      item.children && "cursor-pointer",
                     )}
                   >
                     {item.name}
-                    {item.children && <ChevronDown size={12} className="mt-0.5" />}
+                    {item.children && (
+                      <ChevronDown size={12} className="mt-0.5" />
+                    )}
                   </Link>
 
                   {/* Dropdown */}
@@ -103,18 +111,21 @@ export default function Header() {
             </nav>
 
             {/* Logo */}
-            <Link href="/" className="logo-text text-xl text-charcoal">
+            <Link
+              href="/"
+              className="logo-text text-lg sm:text-xl text-charcoal"
+            >
               AUREON
             </Link>
 
             {/* Actions */}
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-3 sm:gap-5">
               <button
                 onClick={() => setIsSearchOpen(true)}
                 className="text-charcoal hover:text-gold transition-colors duration-300"
                 aria-label="Search"
               >
-                <Search size={19} strokeWidth={1.5} />
+                <Search size={18} strokeWidth={1.5} />
               </button>
 
               <Link
@@ -135,7 +146,7 @@ export default function Header() {
                 className="relative text-charcoal hover:text-gold transition-colors duration-300"
                 aria-label="Cart"
               >
-                <ShoppingBag size={19} strokeWidth={1.5} />
+                <ShoppingBag size={18} strokeWidth={1.5} />
                 {cartCount > 0 && (
                   <span className="absolute -top-1.5 -right-1.5 bg-gold text-charcoal text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-medium">
                     {cartCount}
@@ -157,7 +168,7 @@ export default function Header() {
         {/* Mobile navigation */}
         {mobileOpen && (
           <div className="lg:hidden bg-ivory border-t border-warm-gray/30 animate-fade-in">
-            <nav className="max-w-[1400px] mx-auto px-6 py-6 space-y-4">
+            <nav className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6 space-y-4">
               {navigation.map((item) => (
                 <div key={item.name}>
                   <Link
@@ -184,10 +195,18 @@ export default function Header() {
                 </div>
               ))}
               <div className="pt-4 border-t border-warm-gray/30 flex gap-6">
-                <Link href="/wishlist" onClick={() => setMobileOpen(false)} className="text-sm text-stone">
+                <Link
+                  href="/wishlist"
+                  onClick={() => setMobileOpen(false)}
+                  className="text-sm text-stone"
+                >
                   Wishlist
                 </Link>
-                <Link href="/account" onClick={() => setMobileOpen(false)} className="text-sm text-stone">
+                <Link
+                  href="/account"
+                  onClick={() => setMobileOpen(false)}
+                  className="text-sm text-stone"
+                >
                   Account
                 </Link>
               </div>
