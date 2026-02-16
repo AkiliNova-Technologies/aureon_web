@@ -189,7 +189,7 @@ We combine this with influences from Japanese precision, Swiss engineering, and 
     date: "December 30, 2025",
     category: "Design",
     image:
-      "https://images.unsplash.com/photo-1602607666160-8c4d3fb1f2e2?w=1200&q=80",
+      "https://images.unsplash.com/photo-1668365011614-9c4a49a0e89d?w=800&q=60",
     author: {
       name: "Marcus Hale",
       role: "Product Curator",
