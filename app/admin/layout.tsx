@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   Users,
@@ -14,6 +14,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useEffect } from "react";
 
 const navItems = [
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
@@ -23,8 +24,24 @@ const navItems = [
   { name: "Orders", href: "/admin/orders", icon: ShoppingCart },
 ];
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const pathname = usePathname();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    // Check if user is authenticated
+    const isAuthenticated = localStorage.getItem("isAuthenticated");
+    const userRole = localStorage.getItem("userRole");
+
+    if (!isAuthenticated || userRole !== "admin") {
+      router.push("/signin");
+    }
+  }, [router]);
 
   return (
     <div className="flex min-h-screen bg-ivory">
@@ -35,7 +52,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link href="/admin" className="logo-text text-base text-ivory block">
             AUREON
           </Link>
-          <p className="text-[10px] tracking-[0.2em] uppercase text-stone mt-1">Admin Console</p>
+          <p className="text-[10px] tracking-[0.2em] uppercase text-stone mt-1">
+            Admin Console
+          </p>
         </div>
 
         {/* Nav */}
@@ -50,12 +69,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   "flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-all",
                   isActive
                     ? "bg-ivory/10 text-ivory"
-                    : "text-stone hover:text-ivory hover:bg-ivory/5"
+                    : "text-stone hover:text-ivory hover:bg-ivory/5",
                 )}
               >
                 <item.icon size={16} strokeWidth={1.5} />
                 {item.name}
-                {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-gold" />}
+                {isActive && (
+                  <div className="ml-auto w-1.5 h-1.5 rounded-full bg-gold" />
+                )}
               </Link>
             );
           })}

@@ -2,78 +2,79 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Eye, EyeOff, Check } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-export default function SignUpPage() {
+export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+
+    // Simulate a short delay for better UX
+    setTimeout(() => {
+      // Check credentials
+      if (email === "admin@aureon.com" && password === "akilinova@2026") {
+        // Store authentication state (you might want to use a more secure method in production)
+        localStorage.setItem("isAuthenticated", "true");
+        localStorage.setItem("userEmail", email);
+        localStorage.setItem("userRole", "admin");
+        
+        // Redirect to admin dashboard
+        router.push("/admin");
+      } else {
+        setError("Invalid email or password");
+        setIsLoading(false);
+      }
+    }, 800);
+  };
 
   return (
     <section className="min-h-screen flex">
-      {/* Left — image */}
-      <div className="hidden lg:block lg:w-[45%] relative">
-        <div className="absolute inset-0 bg-charcoal">
-          <img
-            src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=1200&q=80"
-            alt=""
-            className="w-full h-full object-cover opacity-40"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-transparent to-transparent" />
-        </div>
-        <div className="absolute bottom-16 left-12 right-12 text-ivory">
-          <p className="text-xs tracking-[0.25em] uppercase text-gold mb-4">Join Aureon</p>
-          <h2 className="heading-serif text-3xl mb-3">Elevated living starts here.</h2>
-          <div className="space-y-3 mt-6">
-            {[
-              "Exclusive access to new collections",
-              "Order tracking and history",
-              "Curated recommendations",
-              "Members-only events",
-            ].map((benefit) => (
-              <div key={benefit} className="flex items-center gap-3">
-                <div className="w-5 h-5 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0">
-                  <Check size={10} className="text-gold" />
-                </div>
-                <span className="text-sm text-stone">{benefit}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Right — form */}
+      {/* Left — form */}
       <div className="flex-1 flex items-center justify-center px-6 py-16">
         <div className="w-full max-w-md">
           <Link href="/" className="logo-text text-xl text-charcoal block mb-12">
             AUREON
           </Link>
-          <h1 className="heading-serif text-3xl md:text-4xl mb-2">Create your account</h1>
-          <p className="text-stone text-sm mb-10">Join the Aureon community.</p>
+          <h1 className="heading-serif text-3xl md:text-4xl mb-2">Welcome back</h1>
+          <p className="text-stone text-sm mb-10">Sign in to your account to continue.</p>
 
-          <div className="space-y-5">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs text-stone mb-2 tracking-wider uppercase">First Name *</label>
-                <input type="text" placeholder="First name" />
-              </div>
-              <div>
-                <label className="block text-xs text-stone mb-2 tracking-wider uppercase">Last Name *</label>
-                <input type="text" placeholder="Last name" />
-              </div>
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded">
+              {error}
             </div>
+          )}
+
+          <form onSubmit={handleSignIn} className="space-y-5">
             <div>
               <label className="block text-xs text-stone mb-2 tracking-wider uppercase">Email *</label>
-              <input type="email" placeholder="Enter your email" />
-            </div>
-            <div>
-              <label className="block text-xs text-stone mb-2 tracking-wider uppercase">Phone (optional)</label>
-              <input type="tel" placeholder="Phone number" />
+              <input 
+                type="email" 
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full border border-stone/20 focus:border-gold outline-none px-4 py-3 text-sm"
+              />
             </div>
             <div>
               <label className="block text-xs text-stone mb-2 tracking-wider uppercase">Password *</label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
-                  placeholder="Create a password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="w-full border border-stone/20 focus:border-gold outline-none px-4 py-3 text-sm pr-12"
                 />
                 <button
                   type="button"
@@ -83,30 +84,30 @@ export default function SignUpPage() {
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
-              <p className="text-[10px] text-stone mt-1.5">Minimum 8 characters with at least one number</p>
             </div>
 
-            <label className="flex items-start gap-2.5 cursor-pointer">
-              <input type="checkbox" className="!w-4 !h-4 !p-0 rounded accent-charcoal mt-0.5" />
-              <span className="text-xs text-stone leading-relaxed">
-                I agree to the{" "}
-                <Link href="#" className="text-charcoal hover:text-gold underline">Terms & Conditions</Link>{" "}
-                and{" "}
-                <Link href="#" className="text-charcoal hover:text-gold underline">Privacy Policy</Link>
-              </span>
-            </label>
+            <div className="flex items-center justify-between">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" className="!w-4 !h-4 !p-0 rounded accent-charcoal" />
+                <span className="text-xs text-stone">Remember me</span>
+              </label>
+              <Link href="#" className="text-xs text-stone hover:text-gold transition-colors">
+                Forgot password?
+              </Link>
+            </div>
 
-            <Link
-              href="/account"
-              className="btn-primary block w-full text-center py-3.5 text-sm tracking-[0.1em] uppercase"
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="btn-primary w-full text-center py-3.5 text-sm tracking-[0.1em] uppercase mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Create Account
-            </Link>
-          </div>
+              {isLoading ? "Signing in..." : "Sign In"}
+            </button>
+          </form>
 
           <div className="mt-8 flex items-center gap-4">
             <div className="divider flex-1" />
-            <span className="text-xs text-stone">or sign up with</span>
+            <span className="text-xs text-stone">or continue with</span>
             <div className="divider flex-1" />
           </div>
 
@@ -116,10 +117,29 @@ export default function SignUpPage() {
           </div>
 
           <p className="text-center text-sm text-stone mt-10">
-            Already have an account?{" "}
-            <Link href="/signin" className="text-charcoal hover:text-gold transition-colors font-medium">
-              Sign in
+            Don&apos;t have an account?{" "}
+            <Link href="/signup" className="text-charcoal hover:text-gold transition-colors font-medium">
+              Create one
             </Link>
+          </p>
+        </div>
+      </div>
+
+      {/* Right — image */}
+      <div className="hidden lg:block lg:w-[45%] relative">
+        <div className="absolute inset-0 bg-charcoal">
+          <img
+            src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1200&q=80"
+            alt=""
+            className="w-full h-full object-cover opacity-40"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-transparent to-transparent" />
+        </div>
+        <div className="absolute bottom-16 left-12 right-12 text-ivory">
+          <p className="text-xs tracking-[0.25em] uppercase text-gold mb-4">The Aureon Experience</p>
+          <h2 className="heading-serif text-3xl mb-3">Buy less. Choose better.</h2>
+          <p className="text-stone text-sm leading-relaxed max-w-sm">
+            Access your curated collection, track orders, and discover new arrivals selected with intention.
           </p>
         </div>
       </div>
